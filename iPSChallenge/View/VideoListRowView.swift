@@ -18,10 +18,12 @@ struct VideoListRowView: View {
     }
     
     var body: some View {
-        HStack {
-            self.thumbnail
-            Text(viewModel.title)
-                .font(.body)
+        NavigationLink(destination: VideoDetailView(viewModel:viewModel.detailViewModel)) {
+            HStack {
+                self.thumbnail
+                Text(viewModel.title)
+                    .font(.body)
+            }
         }
     }
     

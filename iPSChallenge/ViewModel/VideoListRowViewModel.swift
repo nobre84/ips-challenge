@@ -27,7 +27,10 @@ class VideoListRowViewModel: ObservableObject, Identifiable {
     var subtitle: String {
         return video.description
     }
-
+    
+    var detailViewModel: VideoDetailViewModel {
+        return VideoDetailViewModel(video: video)
+    }
 }
 
 extension VideoListRowViewModel: Equatable {
