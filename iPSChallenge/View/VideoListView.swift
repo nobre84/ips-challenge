@@ -46,10 +46,7 @@ struct VideoListView: View {
                 ).id("EmptyView")
             }
             return AnyView(
-                ForEach(rows) { video in
-                    Text(video.name)
-                }
-                
+                ForEach(rows, content: VideoListRowView.init(viewModel:))                
             ).id("ListView")
         }
     }

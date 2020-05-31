@@ -16,7 +16,7 @@ class VideoListViewModel: ObservableObject, Identifiable {
         
         case loading
         case error(Error)
-        case ready([Video])
+        case ready([VideoListRowViewModel])
         
         var isLoading: Bool {
             if case .loading = self {
@@ -58,7 +58,7 @@ class VideoListViewModel: ObservableObject, Identifiable {
                     print(error)
                 }
             }, receiveValue: { [weak self] videos in
-                self?.state = .ready(videos)
+                self?.state = .ready(videos.map(VideoListRowViewModel.init))
             })
             .store(in: &disposables)
     }
