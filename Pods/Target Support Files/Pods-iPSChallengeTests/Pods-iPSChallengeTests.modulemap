@@ -1,0 +1,6 @@
+framework module Pods_iPSChallengeTests {
+  umbrella header "Pods-iPSChallengeTests-umbrella.h"
+
+  export *
+  module * { export * }
+}
