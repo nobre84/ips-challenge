@@ -58,3 +58,12 @@ extension iPSService: TargetType {
     }
 }
 
+extension iPSService: MoyaCacheable {
+    
+    var cachePolicy: URLRequest.CachePolicy {
+        switch self {
+        case .videos:
+            return .returnCacheDataElseLoad
+        }
+    }
+}

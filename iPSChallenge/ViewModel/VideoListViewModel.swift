@@ -39,7 +39,7 @@ class VideoListViewModel: ObservableObject, Identifiable {
     private let provider: MoyaProvider<iPSService>
     private var disposables = Set<AnyCancellable>()
     
-    init(provider: MoyaProvider<iPSService> = MoyaProvider<iPSService>()) {
+    init(provider: MoyaProvider<iPSService> = MoyaProvider<iPSService>(plugins: [MoyaCachePlugin()])) {
         self.provider = provider
     }
     

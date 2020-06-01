@@ -12,6 +12,7 @@
 		002CDB852483D6E0006A91DF /* VideoDetailView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 002CDB842483D6E0006A91DF /* VideoDetailView.swift */; };
 		002CDB872483D6EA006A91DF /* VideoDetailViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 002CDB862483D6EA006A91DF /* VideoDetailViewModel.swift */; };
 		002CDB8A2485024E006A91DF /* Localizable.strings in Resources */ = {isa = PBXBuildFile; fileRef = 002CDB8C2485024E006A91DF /* Localizable.strings */; };
+		002CDB9024850E2D006A91DF /* MoyaCachePlugin.swift in Sources */ = {isa = PBXBuildFile; fileRef = 002CDB8F24850E2D006A91DF /* MoyaCachePlugin.swift */; };
 		00B4031F2483009E00379404 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 00B4031E2483009E00379404 /* AppDelegate.swift */; };
 		00B403212483009E00379404 /* SceneDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 00B403202483009E00379404 /* SceneDelegate.swift */; };
 		00B40325248300A000379404 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 00B40324248300A000379404 /* Assets.xcassets */; };
@@ -47,6 +48,7 @@
 		002CDB862483D6EA006A91DF /* VideoDetailViewModel.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = VideoDetailViewModel.swift; sourceTree = "<group>"; };
 		002CDB8B2485024E006A91DF /* en */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = en; path = en.lproj/Localizable.strings; sourceTree = "<group>"; };
 		002CDB8D24850260006A91DF /* pt-BR */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = "pt-BR"; path = "pt-BR.lproj/Localizable.strings"; sourceTree = "<group>"; };
+		002CDB8F24850E2D006A91DF /* MoyaCachePlugin.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MoyaCachePlugin.swift; sourceTree = "<group>"; };
 		00B4031B2483009E00379404 /* iPSChallenge.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = iPSChallenge.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		00B4031E2483009E00379404 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		00B403202483009E00379404 /* SceneDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SceneDelegate.swift; sourceTree = "<group>"; };
@@ -93,6 +95,15 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		002CDB8E24850DD4006A91DF /* Support */ = {
+			isa = PBXGroup;
+			children = (
+				00B40346248304FA00379404 /* Extensions */,
+				002CDB8F24850E2D006A91DF /* MoyaCachePlugin.swift */,
+			);
+			path = Support;
+			sourceTree = "<group>";
+		};
 		00B403122483009E00379404 = {
 			isa = PBXGroup;
 			children = (
@@ -120,7 +131,7 @@
 				00B403432483010900379404 /* Model */,
 				00B403442483012100379404 /* ViewModel */,
 				00B403452483012700379404 /* View */,
-				00B40346248304FA00379404 /* Extensions */,
+				002CDB8E24850DD4006A91DF /* Support */,
 				00B40341248300AE00379404 /* Resources */,
 				00B40342248300B400379404 /* Supporting files */,
 			);
@@ -438,6 +449,7 @@
 				002CDB852483D6E0006A91DF /* VideoDetailView.swift in Sources */,
 				00B4035F2483B68E00379404 /* VideoListViewModel.swift in Sources */,
 				00B403502483AFE300379404 /* iPSService.swift in Sources */,
+				002CDB9024850E2D006A91DF /* MoyaCachePlugin.swift in Sources */,
 				002CDB832483D5FA006A91DF /* VideoListRowView.swift in Sources */,
 				002CDB812483D5F0006A91DF /* VideoListRowViewModel.swift in Sources */,
 				00B403572483B55900379404 /* AnyPublisher+Response.swift in Sources */,
