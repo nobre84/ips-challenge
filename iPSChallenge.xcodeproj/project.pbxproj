@@ -24,7 +24,7 @@
 		00B403592483B55900379404 /* MoyaPublisher.swift in Sources */ = {isa = PBXBuildFile; fileRef = 00B403542483B55900379404 /* MoyaPublisher.swift */; };
 		00B4035D2483B64D00379404 /* Video.swift in Sources */ = {isa = PBXBuildFile; fileRef = 00B4035C2483B64D00379404 /* Video.swift */; };
 		00B4035F2483B68E00379404 /* VideoListViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 00B4035E2483B68E00379404 /* VideoListViewModel.swift */; };
-		00B403652483B92400379404 /* LoadingView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 00B403642483B92400379404 /* LoadingView.swift */; };
+		00B403652483B92400379404 /* ActivityIndicator.swift in Sources */ = {isa = PBXBuildFile; fileRef = 00B403642483B92400379404 /* ActivityIndicator.swift */; };
 		00B4036A2483C49400379404 /* VideoListResponse.swift in Sources */ = {isa = PBXBuildFile; fileRef = 00B403692483C49400379404 /* VideoListResponse.swift */; };
 		3415EBD94A9478715A6C488C /* Pods_iPSChallengeTests.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 89B25362B66D0FB3751BE829 /* Pods_iPSChallengeTests.framework */; };
 		F61BAB27422247B6921FA53B /* Pods_iPSChallenge.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = A4910612C6B306CF986BDD4E /* Pods_iPSChallenge.framework */; };
@@ -63,7 +63,7 @@
 		00B403542483B55900379404 /* MoyaPublisher.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MoyaPublisher.swift; sourceTree = "<group>"; };
 		00B4035C2483B64D00379404 /* Video.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Video.swift; sourceTree = "<group>"; };
 		00B4035E2483B68E00379404 /* VideoListViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = VideoListViewModel.swift; sourceTree = "<group>"; };
-		00B403642483B92400379404 /* LoadingView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = LoadingView.swift; sourceTree = "<group>"; };
+		00B403642483B92400379404 /* ActivityIndicator.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ActivityIndicator.swift; sourceTree = "<group>"; };
 		00B403692483C49400379404 /* VideoListResponse.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = VideoListResponse.swift; sourceTree = "<group>"; };
 		55CE6118F75569328A489B63 /* Pods-iPSChallengeTests.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-iPSChallengeTests.release.xcconfig"; path = "Target Support Files/Pods-iPSChallengeTests/Pods-iPSChallengeTests.release.xcconfig"; sourceTree = "<group>"; };
 		8545F3431B4C2990C00A8081 /* Pods-iPSChallenge.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-iPSChallenge.release.xcconfig"; path = "Target Support Files/Pods-iPSChallenge/Pods-iPSChallenge.release.xcconfig"; sourceTree = "<group>"; };
@@ -180,7 +180,7 @@
 				00B4034924830E8300379404 /* VideoListView.swift */,
 				002CDB822483D5FA006A91DF /* VideoListRowView.swift */,
 				002CDB842483D6E0006A91DF /* VideoDetailView.swift */,
-				00B403642483B92400379404 /* LoadingView.swift */,
+				00B403642483B92400379404 /* ActivityIndicator.swift */,
 			);
 			path = View;
 			sourceTree = "<group>";
@@ -431,7 +431,7 @@
 				00B4031F2483009E00379404 /* AppDelegate.swift in Sources */,
 				00B4035D2483B64D00379404 /* Video.swift in Sources */,
 				00B4036A2483C49400379404 /* VideoListResponse.swift in Sources */,
-				00B403652483B92400379404 /* LoadingView.swift in Sources */,
+				00B403652483B92400379404 /* ActivityIndicator.swift in Sources */,
 				00B403212483009E00379404 /* SceneDelegate.swift in Sources */,
 				00B4034A24830E8300379404 /* VideoListView.swift in Sources */,
 				00B403592483B55900379404 /* MoyaPublisher.swift in Sources */,
