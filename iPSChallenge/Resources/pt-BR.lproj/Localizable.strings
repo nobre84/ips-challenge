@@ -10,3 +10,4 @@
 "loading-message" = "Loading...";
 "retry-button" = "Retry";
 "no-videos-message" = "Nenhum vídeo";
+"video-detail.download-button" = "Baixar vídeo";

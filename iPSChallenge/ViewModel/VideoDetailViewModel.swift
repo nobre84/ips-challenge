@@ -23,6 +23,14 @@ class VideoDetailViewModel: ObservableObject, Identifiable {
         return video.description
     }
     
+    var thumbnail: URL {
+        return video.thumbnail
+    }
+    
+    var videoLink: URL {
+        return video.videoLink
+    }
+    
     func playVideo() {
         
     }
