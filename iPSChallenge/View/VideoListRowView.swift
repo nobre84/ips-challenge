@@ -7,7 +7,7 @@
 //
 
 import SwiftUI
-import URLImage
+import SDWebImageSwiftUI
 
 struct VideoListRowView: View {
             
@@ -28,20 +28,12 @@ struct VideoListRowView: View {
     }
     
     private var thumbnail: some View {
-        URLImage(viewModel.thumbnail,
-                 processors: [ Resize(size: CGSize(width: 54, height: 54),
-                                      scale: UIScreen.main.scale) ],
-                 placeholder: { _ in
-                    ActivityIndicator(isAnimating: .constant(true),
-                                      style: .medium)
-                },
-                content:  {
-                    $0.image
-                        .resizable()
-                        .aspectRatio(contentMode: .fill)
-                        .clipped()
-                        .cornerRadius(2)
-                })
+        WebImage(url: viewModel.thumbnail)
+            .resizable()
+            .indicator(.activity)
+            .transition(.fade(duration: 0.5))
+            .scaledToFit()
             .frame(width: 54, height: 54)
+            .cornerRadius(3)
     }
 }

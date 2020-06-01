@@ -18,13 +18,17 @@ PODS:
   - OHHTTPStubs/OHPathHelpers (9.0.0)
   - OHHTTPStubs/Swift (9.0.0):
     - OHHTTPStubs/Default
-  - URLImage (0.9.15)
+  - SDWebImage (5.8.0):
+    - SDWebImage/Core (= 5.8.0)
+  - SDWebImage/Core (5.8.0)
+  - SDWebImageSwiftUI (1.5.0):
+    - SDWebImage (~> 5.7)
 
 DEPENDENCIES:
   - Moya
   - Nimble
   - OHHTTPStubs/Swift
-  - URLImage
+  - SDWebImageSwiftUI
 
 SPEC REPOS:
   trunk:
@@ -32,15 +36,17 @@ SPEC REPOS:
     - Moya
     - Nimble
     - OHHTTPStubs
-    - URLImage
+    - SDWebImage
+    - SDWebImageSwiftUI
 
 SPEC CHECKSUMS:
   Alamofire: 9d5c5f602928e512395b30950c5984eca840093c
   Moya: 5b45dacb75adb009f97fde91c204c1e565d31916
   Nimble: 2da33c44adfde49552d4a6b3ef16039a45bf8dca
   OHHTTPStubs: cb29d2a9d09a828ecb93349a2b0c64f99e0db89f
-  URLImage: 1adef9b81f071fc2fc13a1a87ff882c0a694d48b
+  SDWebImage: 84000f962cbfa70c07f19d2234cbfcf5d779b5dc
+  SDWebImageSwiftUI: 43687ffe232ddd33fe0659498b7ca9884fdd6b35
 
-PODFILE CHECKSUM: 9dd27d7ab2a508eaf736e6be8f72f0fad5a5c919
+PODFILE CHECKSUM: ba6c893eeb6e6e904ff7b60d5b5fa0722485cc78
 
 COCOAPODS: 1.9.3

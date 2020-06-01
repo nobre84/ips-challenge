@@ -14,6 +14,7 @@ class VideoListViewModel: ObservableObject, Identifiable {
 
     enum State {
         
+        case uninitialized
         case loading
         case error(Error)
         case ready([VideoListRowViewModel])
@@ -33,7 +34,7 @@ class VideoListViewModel: ObservableObject, Identifiable {
         }
     }
     
-    @Published var state: State = .loading
+    @Published var state: State = .uninitialized
     
     private let provider: MoyaProvider<iPSService>
     private var disposables = Set<AnyCancellable>()
@@ -43,6 +44,7 @@ class VideoListViewModel: ObservableObject, Identifiable {
     }
     
     func fetchVideos() {
+        state = .loading
         let decoder = JSONDecoder()
         decoder.dateDecodingStrategy = .iso8601
         provider.requestPublisher(.videos)

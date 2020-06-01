@@ -17,20 +17,26 @@ struct VideoListView: View {
     }
     
     var body: some View {
-        LoadingView(isShowing: .constant(viewModel.state.isLoading),
-                    message: .constant(NSLocalizedString("Loading", comment: ""))) {
-            self.content
-        }
-        .navigationBarTitle("Videos")
-        .onAppear() {
-            self.viewModel.fetchVideos()
+        content
+            .navigationBarTitle("video-list.title")
+            .onAppear() {
+                if case .uninitialized = self.viewModel.state {
+                    self.viewModel.fetchVideos()
+                }
         }
     }
     
     private var content: some View {
         switch viewModel.state {
-        case .loading:
-            return AnyView(EmptyView()).id("LoadingView")
+        case .loading, .uninitialized:
+            return AnyView(
+                VStack {
+                    ActivityIndicator(isAnimating: .constant(true),
+                                      style: .large)
+                    Text("loading-message")
+                        .foregroundColor(.gray)
+                }
+            ).id("LoadingView")
         case .error(let error):
             return AnyView(
                 VStack {
@@ -40,6 +46,11 @@ struct VideoListView: View {
                         .frame(width: 48, height: 48)
                     Text(error.localizedDescription)
                         .foregroundColor(.gray)
+                    Button(action: {
+                        self.viewModel.fetchVideos()
+                    }) {
+                        Text("retry-button")
+                    }
                 }
             ).id("ErrorView")
         case .ready(let rows):
@@ -50,7 +61,7 @@ struct VideoListView: View {
                             .resizable()
                             .aspectRatio(contentMode: .fit)
                             .frame(width: 48, height: 48)
-                        Text("No videos")
+                        Text("no-videos-message")
                             .foregroundColor(.gray)
                     }
                 ).id("EmptyView")
@@ -62,8 +73,4 @@ struct VideoListView: View {
             ).id("ListView")
         }
     }
-}
-
-extension String: LocalizedError {
-    public var errorDescription: String? { return self }
 }

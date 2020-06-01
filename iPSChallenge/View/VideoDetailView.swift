@@ -7,7 +7,6 @@
 //
 
 import SwiftUI
-import URLImage
 
 struct VideoDetailView: View {
     @ObservedObject var viewModel: VideoDetailViewModel

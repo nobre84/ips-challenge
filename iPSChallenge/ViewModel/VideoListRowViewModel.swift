@@ -7,7 +7,6 @@
 //
 
 import Foundation
-import URLImage
 
 class VideoListRowViewModel: ObservableObject, Identifiable {
     private let video: Video
