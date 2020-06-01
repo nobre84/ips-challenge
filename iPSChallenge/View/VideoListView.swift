@@ -19,9 +19,7 @@ struct VideoListView: View {
     var body: some View {
         LoadingView(isShowing: .constant(viewModel.state.isLoading),
                     message: .constant(NSLocalizedString("Loading", comment: ""))) {
-            List {
-                self.content
-            }
+            self.content
         }
         .navigationBarTitle("Videos")
         .onAppear() {
@@ -35,19 +33,37 @@ struct VideoListView: View {
             return AnyView(EmptyView()).id("LoadingView")
         case .error(let error):
             return AnyView(
-                Text(error.localizedDescription)
-                    .foregroundColor(.gray)
+                VStack {
+                    Image(systemName: "exclamationmark.circle")
+                        .resizable()
+                        .aspectRatio(contentMode: .fit)
+                        .frame(width: 48, height: 48)
+                    Text(error.localizedDescription)
+                        .foregroundColor(.gray)
+                }
             ).id("ErrorView")
         case .ready(let rows):
             if rows.isEmpty {
                 return AnyView(
-                    Text("No videos")
-                        .foregroundColor(.gray)
+                    VStack {
+                        Image(systemName: "video.slash")
+                            .resizable()
+                            .aspectRatio(contentMode: .fit)
+                            .frame(width: 48, height: 48)
+                        Text("No videos")
+                            .foregroundColor(.gray)
+                    }
                 ).id("EmptyView")
             }
             return AnyView(
-                ForEach(rows, content: VideoListRowView.init(viewModel:))                
+                List {
+                    ForEach(rows, content: VideoListRowView.init(viewModel:))
+                }
             ).id("ListView")
         }
     }
+}
+
+extension String: LocalizedError {
+    public var errorDescription: String? { return self }
 }
