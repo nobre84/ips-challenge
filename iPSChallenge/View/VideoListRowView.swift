@@ -18,7 +18,7 @@ struct VideoListRowView: View {
     }
     
     var body: some View {
-        NavigationLink(destination: VideoDetailView(viewModel:viewModel.detailViewModel)) {
+        NavigationLink(destination: LazyView(VideoDetailView(viewModel: self.viewModel.detailViewModel))) {
             HStack {
                 self.thumbnail
                 Text(viewModel.title)
