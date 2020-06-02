@@ -11,7 +11,7 @@ import SwiftUI
 /// From: https://www.simpleswiftguide.com/how-to-build-a-circular-progress-bar-in-swiftui/
 struct ProgressBar: View {
     
-    let size: CGFloat = 16.0
+    private let size: CGFloat = 16.0
     @Binding var progress: Double
     
     var body: some View {
@@ -28,6 +28,6 @@ struct ProgressBar: View {
                 .foregroundColor(.gray)
                 .rotationEffect(Angle(degrees: 270.0))
                 .animation(.linear)
-        }.frame(width: size, height: size)
+        }
     }
 }

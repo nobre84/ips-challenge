@@ -62,7 +62,7 @@ class VideoDetailViewModel: ObservableObject, Identifiable {
     
     init(video: Video, manager: AssetPersistenceManager = .sharedManager) {
         self.video = video
-        self.asset = manager.assetFor(id: video.videoLink.absoluteString, url: video.videoLink)
+        self.asset = manager.assetFor(id: "\(video.id)", url: video.videoLink)
         self.manager = manager
         self.downloadState = .fromAssetState(manager.downloadState(for: self.asset))
         self.downloadAvailable = manager.isAvailable
