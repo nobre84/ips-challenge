@@ -98,7 +98,7 @@ struct VideoDetailView: View {
         Button(action: {
             self.viewModel.cancelDownload()
         }) {
-            HStack(spacing: 4) {
+            HStack(spacing: 16) {
                 Text("video-detail.cancel-download-button")
                 ProgressBar(progress: self.$viewModel.progress)
                     .frame(width: 16, height: 16)

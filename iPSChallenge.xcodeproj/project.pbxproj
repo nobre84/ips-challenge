@@ -16,7 +16,6 @@
 		005D13362486A48600AE5BFC /* String+LocalizedError.swift in Sources */ = {isa = PBXBuildFile; fileRef = 005D13352486A48600AE5BFC /* String+LocalizedError.swift */; };
 		005D13382486D81500AE5BFC /* Log.swift in Sources */ = {isa = PBXBuildFile; fileRef = 005D13372486D81500AE5BFC /* Log.swift */; };
 		005D133A2486E79300AE5BFC /* LazyView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 005D13392486E79300AE5BFC /* LazyView.swift */; };
-		005D133C2486EF4B00AE5BFC /* ProgressView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 005D133B2486EF4B00AE5BFC /* ProgressView.swift */; };
 		00B4031F2483009E00379404 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 00B4031E2483009E00379404 /* AppDelegate.swift */; };
 		00B403212483009E00379404 /* SceneDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 00B403202483009E00379404 /* SceneDelegate.swift */; };
 		00B40325248300A000379404 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 00B40324248300A000379404 /* Assets.xcassets */; };
@@ -60,7 +59,6 @@
 		005D13352486A48600AE5BFC /* String+LocalizedError.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "String+LocalizedError.swift"; sourceTree = "<group>"; };
 		005D13372486D81500AE5BFC /* Log.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Log.swift; sourceTree = "<group>"; };
 		005D13392486E79300AE5BFC /* LazyView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LazyView.swift; sourceTree = "<group>"; };
-		005D133B2486EF4B00AE5BFC /* ProgressView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProgressView.swift; sourceTree = "<group>"; };
 		00B4031B2483009E00379404 /* iPSChallenge.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = iPSChallenge.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		00B4031E2483009E00379404 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		00B403202483009E00379404 /* SceneDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SceneDelegate.swift; sourceTree = "<group>"; };
@@ -215,7 +213,6 @@
 				00F38BBF24851E9C00F8D8D0 /* PlayerView.swift */,
 				00F38BEB24865DF100F8D8D0 /* ProgressBar.swift */,
 				005D13392486E79300AE5BFC /* LazyView.swift */,
-				005D133B2486EF4B00AE5BFC /* ProgressView.swift */,
 			);
 			path = View;
 			sourceTree = "<group>";
@@ -467,7 +464,6 @@
 				005D133A2486E79300AE5BFC /* LazyView.swift in Sources */,
 				005D13382486D81500AE5BFC /* Log.swift in Sources */,
 				00B4031F2483009E00379404 /* AppDelegate.swift in Sources */,
-				005D133C2486EF4B00AE5BFC /* ProgressView.swift in Sources */,
 				00B4035D2483B64D00379404 /* Video.swift in Sources */,
 				005D13362486A48600AE5BFC /* String+LocalizedError.swift in Sources */,
 				00B4036A2483C49400379404 /* VideoListResponse.swift in Sources */,

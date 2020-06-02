@@ -324,6 +324,7 @@ extension AssetPersistenceManager: AVAssetDownloadDelegate {
         }
         
         if let error = error as NSError? {
+            userInfo[Asset.Keys.downloadState] = Asset.DownloadState.notDownloaded
             switch (error.domain, error.code) {
             case (NSURLErrorDomain, NSURLErrorCancelled):
                 /*
@@ -347,7 +348,6 @@ extension AssetPersistenceManager: AVAssetDownloadDelegate {
                 Log.debug("Error downloading asset: \(error)")
             }
             
-            userInfo[Asset.Keys.downloadState] = Asset.DownloadState.notDownloaded
             return
         }
 
