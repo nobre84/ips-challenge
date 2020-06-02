@@ -44,7 +44,7 @@ class VideoDetailViewModel: ObservableObject, Identifiable {
     }
     
     private let video: Video
-    private let asset: Asset
+    private var asset: Asset
     private let manager: AssetPersistenceManager
     private var disposables = Set<AnyCancellable>()
     
@@ -145,6 +145,7 @@ class VideoDetailViewModel: ObservableObject, Identifiable {
     
     func removeVideo() {
         manager.deleteAsset(asset)
+        asset = manager.assetFor(id: "\(video.id)", url: video.videoLink)
     }
     
     func cancelDownload() {
