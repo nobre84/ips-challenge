@@ -78,7 +78,7 @@ class AssetPersistenceManager: NSObject {
             
             self.isAvailable = true
             NotificationCenter.default.post(name: .assetPersistenceManagerDidRestoreStateNotification, object: nil)
-            print("Manager restoration complete")
+            Log.debug("Manager restoration complete")
         }
     }
     
@@ -150,7 +150,7 @@ class AssetPersistenceManager: NSObject {
     func localAsset(withId id: String) -> Asset? {
         let userDefaults = UserDefaults.standard
         guard let localFileLocation = userDefaults.value(forKey: id) as? Data else {
-            print("Not downloaded")
+            Log.debug("Not downloaded")
             return nil 
         }
         
@@ -167,7 +167,7 @@ class AssetPersistenceManager: NSObject {
             
             return asset
         } catch  {
-            print("Failed to create URL from bookmark with error: \(error)")
+            Log.debug("Failed to create URL from bookmark with error: \(error)")
             userDefaults.removeObject(forKey: id)
             return nil
         }
@@ -208,7 +208,7 @@ class AssetPersistenceManager: NSObject {
                 postUpdate(userInfo)
             }
         } catch {
-            print("An error occured deleting the file: \(error)")
+            Log.debug("An error occured deleting the file: \(error)")
         }
     }
     
@@ -334,14 +334,14 @@ extension AssetPersistenceManager: AVAssetDownloadDelegate {
                     
                     userDefaults.removeObject(forKey: asset.id)
                 } catch {
-                    print("An error occured trying to delete the contents on disk for \(asset.id): \(error)")
+                    Log.debug("An error occured trying to delete the contents on disk for \(asset.id): \(error)")
                 }
                                 
-                print("Cancel downloading asset \(asset)")
+                Log.debug("Cancel downloading asset \(asset)")
                 
             default:
                 userInfo[Asset.Keys.error] = error
-                print("Error downloading asset: \(error)")
+                Log.debug("Error downloading asset: \(error)")
             }
             
             userInfo[Asset.Keys.downloadState] = Asset.DownloadState.notDownloaded
@@ -353,7 +353,7 @@ extension AssetPersistenceManager: AVAssetDownloadDelegate {
 
             userDefaults.set(bookmark, forKey: asset.id)
         } catch {
-            print("Failed to create bookmarkData for download URL.")
+            Log.debug("Failed to create bookmarkData for download URL.")
             userInfo[Asset.Keys.error] = error
             userInfo[Asset.Keys.downloadState] = Asset.DownloadState.notDownloaded
             return
@@ -392,7 +392,7 @@ extension AssetPersistenceManager: AVAssetDownloadDelegate {
         userInfo[Asset.Keys.id] = asset.id
         userInfo[Asset.Keys.percentDownloaded] = percentComplete
         
-        print("ProgressNotification \(percentComplete)")
+        Log.debug("ProgressNotification \(percentComplete)")
         NotificationCenter.default.post(name: .assetDownloadProgressNotification, object: nil, userInfo:  userInfo)
     }
 }

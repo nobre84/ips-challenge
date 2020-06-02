@@ -57,7 +57,7 @@ class VideoListViewModel: ObservableObject, Identifiable {
             .sink(receiveCompletion: { [weak self] completion in
                 if case let .failure(error) = completion {
                     self?.state = .error(error)
-                    print(error)
+                    Log.debug("Error fetching /videos endpoint: \(error)")
                 }
             }, receiveValue: { [weak self] videos in
                 self?.state = .ready(videos.map(VideoListRowViewModel.init))

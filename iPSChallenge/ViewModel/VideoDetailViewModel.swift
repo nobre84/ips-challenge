@@ -87,7 +87,7 @@ class VideoDetailViewModel: ObservableObject, Identifiable {
                 let error = userInfo[Asset.Keys.error] as? Error
                 self?.hasError = error != nil
                 self?.errorMessage = error?.localizedDescription
-                print("State change: \(self?.downloadState) with error \(error)")
+                Log.debug("State change: \(String(describing: self?.downloadState)) with error \(String(describing: error))")
         }
         .store(in: &disposables)
         
@@ -108,7 +108,7 @@ class VideoDetailViewModel: ObservableObject, Identifiable {
                 // Update state
                 self?.downloadState = .downloading(progress)
                 
-                print("Progress change: \(self?.downloadState)")
+                Log.debug("Progress change: \(String(describing: self?.downloadState))")
         }
         .store(in: &disposables)
         
@@ -118,7 +118,7 @@ class VideoDetailViewModel: ObservableObject, Identifiable {
             .sink { [weak self] _ in
                 self?.downloadAvailable = true
                 
-                print("Download manager is available")
+                Log.debug("Download manager is available")
         }
         .store(in: &disposables)
     }

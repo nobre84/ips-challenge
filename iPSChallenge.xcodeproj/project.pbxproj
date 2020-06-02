@@ -14,6 +14,7 @@
 		002CDB8A2485024E006A91DF /* Localizable.strings in Resources */ = {isa = PBXBuildFile; fileRef = 002CDB8C2485024E006A91DF /* Localizable.strings */; };
 		002CDB9024850E2D006A91DF /* MoyaCachePlugin.swift in Sources */ = {isa = PBXBuildFile; fileRef = 002CDB8F24850E2D006A91DF /* MoyaCachePlugin.swift */; };
 		005D13362486A48600AE5BFC /* String+LocalizedError.swift in Sources */ = {isa = PBXBuildFile; fileRef = 005D13352486A48600AE5BFC /* String+LocalizedError.swift */; };
+		005D13382486D81500AE5BFC /* Log.swift in Sources */ = {isa = PBXBuildFile; fileRef = 005D13372486D81500AE5BFC /* Log.swift */; };
 		00B4031F2483009E00379404 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 00B4031E2483009E00379404 /* AppDelegate.swift */; };
 		00B403212483009E00379404 /* SceneDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 00B403202483009E00379404 /* SceneDelegate.swift */; };
 		00B40325248300A000379404 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 00B40324248300A000379404 /* Assets.xcassets */; };
@@ -55,6 +56,7 @@
 		002CDB8D24850260006A91DF /* pt-BR */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = "pt-BR"; path = "pt-BR.lproj/Localizable.strings"; sourceTree = "<group>"; };
 		002CDB8F24850E2D006A91DF /* MoyaCachePlugin.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MoyaCachePlugin.swift; sourceTree = "<group>"; };
 		005D13352486A48600AE5BFC /* String+LocalizedError.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "String+LocalizedError.swift"; sourceTree = "<group>"; };
+		005D13372486D81500AE5BFC /* Log.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Log.swift; sourceTree = "<group>"; };
 		00B4031B2483009E00379404 /* iPSChallenge.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = iPSChallenge.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		00B4031E2483009E00379404 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		00B403202483009E00379404 /* SceneDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SceneDelegate.swift; sourceTree = "<group>"; };
@@ -112,6 +114,7 @@
 				002CDB8F24850E2D006A91DF /* MoyaCachePlugin.swift */,
 				00F38BE9248659D300F8D8D0 /* AssetPersistenceManager.swift */,
 				005D13352486A48600AE5BFC /* String+LocalizedError.swift */,
+				005D13372486D81500AE5BFC /* Log.swift */,
 			);
 			path = Support;
 			sourceTree = "<group>";
@@ -455,6 +458,7 @@
 			files = (
 				00F38BE8248659CB00F8D8D0 /* Asset.swift in Sources */,
 				002CDB872483D6EA006A91DF /* VideoDetailViewModel.swift in Sources */,
+				005D13382486D81500AE5BFC /* Log.swift in Sources */,
 				00B4031F2483009E00379404 /* AppDelegate.swift in Sources */,
 				00B4035D2483B64D00379404 /* Video.swift in Sources */,
 				005D13362486A48600AE5BFC /* String+LocalizedError.swift in Sources */,
