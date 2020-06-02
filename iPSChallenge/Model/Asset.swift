@@ -11,7 +11,7 @@ import AVFoundation
 struct Asset {
     
     /// The name of the Asset.
-    let name: String
+    let id: String
     
     /// The AVURLAsset corresponding to this Asset.
     let urlAsset: AVURLAsset
@@ -21,7 +21,7 @@ struct Asset {
 extension Asset: Equatable {}
 
 func ==(lhs: Asset, rhs: Asset) -> Bool {
-    return (lhs.name == rhs.name) && (lhs.urlAsset == rhs.urlAsset)
+    return (lhs.id == rhs.id) && (lhs.urlAsset == rhs.urlAsset)
 }
 
 
@@ -54,24 +54,30 @@ extension Asset {
          `AssetDownloadStateChangedNotification` Notifications as well as
          AssetListManager.
          */
-        case name = "AssetNameKey"
+        case id
         
         /**
          Key for the Asset download percentage, used for
          `AssetDownloadProgressNotification` Notification.
          */
-        case percentDownloaded = "AssetPercentDownloadedKey"
+        case percentDownloaded
         
         /**
          Key for the Asset download state, used for
          `AssetDownloadStateChangedNotification` Notification.
          */
-        case downloadState = "AssetDownloadStateKey"
+        case downloadState
         
         /**
          Key for the Asset download AVMediaSelection display Name, used for
          `AssetDownloadStateChangedNotification` Notification.
          */
-        case downloadSelectionDisplayName = "AssetDownloadSelectionDisplayNameKey"
+        case downloadSelectionDisplayName
+        
+        /**
+         Key for the Asset download Error reporting for
+         `AssetDownloadStateChangedNotification` Notification.
+         */
+        case error
     }
 }

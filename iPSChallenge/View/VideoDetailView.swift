@@ -12,8 +12,6 @@ import SDWebImageSwiftUI
 struct VideoDetailView: View {
     @ObservedObject var viewModel: VideoDetailViewModel
     @State private var isPlaying = false
-    @State private var isDownloading = false
-    @State private var progress: Float = 0
     
     private let maxHeight: CGFloat = 226
     private let playIconSize: CGFloat = 30
@@ -33,7 +31,12 @@ struct VideoDetailView: View {
             }.padding()
         }
         .navigationBarTitle("", displayMode: .inline)
-        .navigationBarItems(trailing: downloadVideoButton)
+        .navigationBarItems(trailing: trailingBarItem)
+        .alert(isPresented: $viewModel.hasError) {
+            Alert(title: Text("video-detail.error-title"),
+                  message: Text(viewModel.errorMessage ?? NSLocalizedString("video-detail.error-default-message",
+                                                                            comment: "")))
+        }
     }
     
     private var titleView: some View {
@@ -75,22 +78,47 @@ struct VideoDetailView: View {
         }
     }
     
-    private var downloadVideoButton: some View {
+    private var trailingBarItem: some View {
+        // There's a weird SwiftUI bug when changing the bar item contents:
+        // https://stackoverflow.com/questions/61915629/swiftui-navigationbaritem-showing-in-strange-position-after-showing-a-different
         Group {
-            if isDownloading {
-                ProgressBar(progress: $progress) {
-                    self.isDownloading = false
-                    self.progress = 0
-                }
+            if self.viewModel.downloadState.isDownloading {
+                self.progressBar
+            } else if self.viewModel.downloadState.isDownloaded {
+                self.eraseVideoButton
             } else {
-                Button(action: {
-                    self.isDownloading = true
-                }) {
-                    HStack {
-                        Text("video-detail.download-button")
-                        Image(systemName: "square.and.arrow.down")
-                    }
-                }
+                self.downloadVideoButton
+            }
+        }
+    }
+    
+    private var progressBar: some View {
+        Button(action: {
+            self.viewModel.cancelDownload()
+        }) {
+            HStack {
+                Text("video-detail.cancel-download-button")
+                ProgressBar(progress: self.viewModel.downloadState.progress)
+            }
+        }
+    }
+    
+    private var eraseVideoButton: some View {
+        Button(action: {
+            self.viewModel.removeVideo()
+        }) {
+            Text("video-detail.delete-button")
+                .foregroundColor(.red)
+        }
+    }
+    
+    private var downloadVideoButton: some View {
+        Button(action: {
+            self.viewModel.downloadVideo()
+        }) {
+            HStack {
+                Text("video-detail.download-button")
+                Image(systemName: "square.and.arrow.down")
             }
         }
     }

@@ -11,8 +11,7 @@ import SwiftUI
 /// From: https://www.simpleswiftguide.com/how-to-build-a-circular-progress-bar-in-swiftui/
 struct ProgressBar: View {
     
-    @Binding var progress: Float
-    let stopHandler: () -> Void
+    @State var progress: Double
     
     var body: some View {
         ZStack {
@@ -28,12 +27,6 @@ struct ProgressBar: View {
                 .foregroundColor(.gray)
                 .rotationEffect(Angle(degrees: 270.0))
                 .animation(.linear)
-            
-            Rectangle()
-                .fill()
-                .foregroundColor(.red)
-        }.onTapGesture {
-            self.stopHandler()
         }
     }
 }

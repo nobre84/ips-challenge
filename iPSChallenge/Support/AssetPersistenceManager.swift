@@ -13,14 +13,18 @@
 import Foundation
 import AVFoundation
 
-/// Notification for when download progress has changed.
-let AssetDownloadProgressNotification: NSNotification.Name = NSNotification.Name(rawValue: "AssetDownloadProgressNotification")
+extension Notification.Name {
+    /// Notification for when download progress has changed.
+    static let assetDownloadProgressNotification: NSNotification.Name = NSNotification.Name(rawValue: "AssetDownloadProgressNotification")
+    
+    /// Notification for when the download state of an Asset has changed.
+    static let assetDownloadStateChangedNotification: NSNotification.Name = NSNotification.Name(rawValue: "AssetDownloadStateChangedNotification")
 
-/// Notification for when the download state of an Asset has changed.
-let AssetDownloadStateChangedNotification: NSNotification.Name = NSNotification.Name(rawValue: "AssetDownloadStateChangedNotification")
+    /// Notification for when AssetPersistenceManager has completely restored its state.
+    static let assetPersistenceManagerDidRestoreStateNotification: NSNotification.Name = NSNotification.Name(rawValue: "AssetPersistenceManagerDidRestoreStateNotification")
+}
 
-/// Notification for when AssetPersistenceManager has completely restored its state.
-let AssetPersistenceManagerDidRestoreStateNotification: NSNotification.Name = NSNotification.Name(rawValue: "AssetPersistenceManagerDidRestoreStateNotification")
+
 
 class AssetPersistenceManager: NSObject {
     // MARK: Properties
@@ -65,11 +69,11 @@ class AssetPersistenceManager: NSObject {
             for task in tasksArray {
                 guard let assetDownloadTask = task as? AVAssetDownloadTask, let assetName = task.taskDescription else { break }
                 
-                let asset = Asset(name: assetName, urlAsset: assetDownloadTask.urlAsset)
+                let asset = Asset(id: assetName, urlAsset: assetDownloadTask.urlAsset)
                 self.activeDownloadsMap[assetDownloadTask] = asset
             }
             
-            NotificationCenter.default.post(name: AssetPersistenceManagerDidRestoreStateNotification, object: nil)
+            NotificationCenter.default.post(name: .assetPersistenceManagerDidRestoreStateNotification, object: nil)
         }
     }
     
@@ -80,30 +84,49 @@ class AssetPersistenceManager: NSObject {
          with a minimum bitrate corresponding with one of the lower bitrate variants
          in the asset.
          */
-        guard let task = assetDownloadURLSession.makeAssetDownloadTask(asset: asset.urlAsset, assetTitle: asset.name, assetArtworkData: nil, options: [AVAssetDownloadTaskMinimumRequiredMediaBitrateKey: 265000]) else {
+        guard let task = assetDownloadURLSession.makeAssetDownloadTask(asset: asset.urlAsset, assetTitle: asset.id, assetArtworkData: nil, options: [AVAssetDownloadTaskMinimumRequiredMediaBitrateKey: 265000]) else {
             fatalError("Failed to create download task")
         }
         
         // To better track the AVAssetDownloadTask we set the taskDescription to something unique for our sample.
-        task.taskDescription = asset.name
+        task.taskDescription = asset.id
         
         activeDownloadsMap[task] = asset
         
         task.resume()
         
         var userInfo = [Asset.Keys: Any]()
-        userInfo[Asset.Keys.name] = asset.name
+        userInfo[Asset.Keys.id] = asset.id
         userInfo[Asset.Keys.downloadState] = Asset.DownloadState.downloading
         
-        NotificationCenter.default.post(name: AssetDownloadStateChangedNotification, object: nil, userInfo:  userInfo)
+        postUpdate(userInfo)
+    }
+    
+    func assetFor(id: String, url: URL) -> Asset {
+        // Downloading in progress asset
+        if let asset = inflightAsset(withId: id) {
+            return asset
+        } else {
+            // Already downloaded asset
+            if let asset = localAsset(withId: id) {
+                return asset
+            } else {
+                // Not downloaded asset
+                let urlAsset = AVURLAsset(url: url)
+                
+                let asset = Asset(id: id, urlAsset: urlAsset)
+                
+                return asset
+            }
+        }
     }
     
     /// Returns an Asset given a specific name if that Asset is asasociated with an active download.
-    func assetForStream(withName name: String) -> Asset? {
+    func inflightAsset(withId id: String) -> Asset? {
         var asset: Asset?
         
         for (_, assetValue) in activeDownloadsMap {
-            if name == assetValue.name {
+            if id == assetValue.id {
                 asset = assetValue
                 break
             }
@@ -113,9 +136,9 @@ class AssetPersistenceManager: NSObject {
     }
     
     /// Returns an Asset pointing to a file on disk if it exists.
-    func localAssetForStream(withName name: String) -> Asset? {
+    func localAsset(withId id: String) -> Asset? {
         let userDefaults = UserDefaults.standard
-        guard let localFileLocation = userDefaults.value(forKey: name) as? Data else {
+        guard let localFileLocation = userDefaults.value(forKey: id) as? Data else {
             print("Not downloaded")
             return nil 
         }
@@ -129,7 +152,7 @@ class AssetPersistenceManager: NSObject {
                 fatalError("Bookmark data is stale!")
             }
             
-            asset = Asset(name: name, urlAsset: AVURLAsset(url: url))
+            asset = Asset(id: id, urlAsset: AVURLAsset(url: url))
             
             return asset
         } catch  {
@@ -140,7 +163,7 @@ class AssetPersistenceManager: NSObject {
     /// Returns the current download state for a given Asset.
     func downloadState(for asset: Asset) -> Asset.DownloadState {
         // Check if there is a file URL stored for this asset.
-        if let localFileLocation = localAssetForStream(withName: asset.name)?.urlAsset.url {
+        if let localFileLocation = localAsset(withId: asset.id)?.urlAsset.url {
             // Check if the file exists on disk
             if FileManager.default.fileExists(atPath: localFileLocation.path) {
                 return .downloaded
@@ -148,10 +171,8 @@ class AssetPersistenceManager: NSObject {
         }
         
         // Check if there are any active downloads in flight.
-        for (_, assetValue) in activeDownloadsMap {
-            if asset.name == assetValue.name {
-                return .downloading
-            }
+        if inflightAsset(withId: asset.id) != nil {
+            return .downloading
         }
         
         return .notDownloaded
@@ -162,16 +183,16 @@ class AssetPersistenceManager: NSObject {
         let userDefaults = UserDefaults.standard
         
         do {
-            if let localFileLocation = localAssetForStream(withName: asset.name)?.urlAsset.url {
+            if let localFileLocation = localAsset(withId: asset.id)?.urlAsset.url {
                 try FileManager.default.removeItem(at: localFileLocation)
                 
-                userDefaults.removeObject(forKey: asset.name)
+                userDefaults.removeObject(forKey: asset.id)
                 
                 var userInfo = [Asset.Keys: Any]()
-                userInfo[Asset.Keys.name] = asset.name
+                userInfo[Asset.Keys.id] = asset.id
                 userInfo[Asset.Keys.downloadState] = Asset.DownloadState.notDownloaded
                 
-                NotificationCenter.default.post(name: AssetDownloadStateChangedNotification, object: nil, userInfo:  userInfo)
+                postUpdate(userInfo)
             }
         } catch {
             print("An error occured deleting the file: \(error)")
@@ -263,7 +284,7 @@ class AssetPersistenceManager: NSObject {
 extension AssetPersistenceManager: AVAssetDownloadDelegate {
     
     func postUpdate(_ userInfo: [Asset.Keys: Any]) {
-        NotificationCenter.default.post(name: AssetDownloadStateChangedNotification, object: nil, userInfo: userInfo)
+        NotificationCenter.default.post(name: .assetDownloadStateChangedNotification, object: nil, userInfo: userInfo)
     }
     
     func urlSession(_ session: URLSession, task: URLSessionTask, didCompleteWithError error: Error?) {
@@ -277,7 +298,7 @@ extension AssetPersistenceManager: AVAssetDownloadDelegate {
         
         // Prepare the basic userInfo dictionary that will be posted as part of our notification.
         var userInfo = [Asset.Keys: Any]()
-        userInfo[Asset.Keys.name] = asset.name
+        userInfo[Asset.Keys.id] = asset.id        
         
         if let error = error as NSError? {
             switch (error.domain, error.code) {
@@ -286,24 +307,24 @@ extension AssetPersistenceManager: AVAssetDownloadDelegate {
                  This task was canceled, you should perform cleanup using the
                  URL saved from AVAssetDownloadDelegate.urlSession(_:assetDownloadTask:didFinishDownloadingTo:).
                  */
-                guard let localFileLocation = localAssetForStream(withName: asset.name)?.urlAsset.url else { return }
+                guard let localFileLocation = localAsset(withId: asset.id)?.urlAsset.url else { return }
                 
                 do {
                     try FileManager.default.removeItem(at: localFileLocation)
                     
-                    userDefaults.removeObject(forKey: asset.name)
+                    userDefaults.removeObject(forKey: asset.id)
                 } catch {
-                    print("An error occured trying to delete the contents on disk for \(asset.name): \(error)")
+                    print("An error occured trying to delete the contents on disk for \(asset.id): \(error)")
                 }
-                
-                userInfo[Asset.Keys.downloadState] = Asset.DownloadState.notDownloaded
-                
-            case (NSURLErrorDomain, NSURLErrorUnknown):
-                fatalError("Downloading HLS streams is not supported in the simulator.")
+                                
+                print("Cancel downloading asset \(asset)")
                 
             default:
-                fatalError("An unexpected error occured \(error.domain)")
+                userInfo[Asset.Keys.error] = error
+                print("Error downloading asset: \(error)")
             }
+            
+            userInfo[Asset.Keys.downloadState] = Asset.DownloadState.notDownloaded
             
             postUpdate(userInfo)
             return
@@ -344,9 +365,9 @@ extension AssetPersistenceManager: AVAssetDownloadDelegate {
          This time, the application includes the specific `AVMediaSelection`
          to download as well as a higher bitrate.
          */
-        guard let nextTask = assetDownloadURLSession.makeAssetDownloadTask(asset: task.urlAsset, assetTitle: asset.name, assetArtworkData: nil, options: [AVAssetDownloadTaskMinimumRequiredMediaBitrateKey: 2000000, AVAssetDownloadTaskMediaSelectionKey: mediaSelection]) else { return }
+        guard let nextTask = assetDownloadURLSession.makeAssetDownloadTask(asset: task.urlAsset, assetTitle: asset.id, assetArtworkData: nil, options: [AVAssetDownloadTaskMinimumRequiredMediaBitrateKey: 2000000, AVAssetDownloadTaskMediaSelectionKey: mediaSelection]) else { return }
         
-        nextTask.taskDescription = asset.name
+        nextTask.taskDescription = asset.id
         
         activeDownloadsMap[nextTask] = asset
         
@@ -371,7 +392,7 @@ extension AssetPersistenceManager: AVAssetDownloadDelegate {
             do {
                 let bookmark = try location.bookmarkData()
                 
-                userDefaults.set(bookmark, forKey: asset.name)
+                userDefaults.set(bookmark, forKey: asset.id)
             } catch {
                 print("Failed to create bookmark for location: \(location)")
                 deleteAsset(asset)
@@ -390,10 +411,11 @@ extension AssetPersistenceManager: AVAssetDownloadDelegate {
         }
         
         var userInfo = [Asset.Keys: Any]()
-        userInfo[Asset.Keys.name] = asset.name
+        userInfo[Asset.Keys.id] = asset.id
         userInfo[Asset.Keys.percentDownloaded] = percentComplete
         
-        NotificationCenter.default.post(name: AssetDownloadProgressNotification, object: nil, userInfo:  userInfo)
+        print("ProgressNotification \(percentComplete)")
+        NotificationCenter.default.post(name: .assetDownloadProgressNotification, object: nil, userInfo:  userInfo)
     }
     
     func urlSession(_ session: URLSession, assetDownloadTask: AVAssetDownloadTask, didResolve resolvedMediaSelection: AVMediaSelection) {
