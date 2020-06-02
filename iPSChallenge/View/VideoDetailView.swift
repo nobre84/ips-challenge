@@ -12,6 +12,8 @@ import SDWebImageSwiftUI
 struct VideoDetailView: View {
     @ObservedObject var viewModel: VideoDetailViewModel
     @State private var isPlaying = false
+    @State private var isDownloading = false
+    @State private var progress: Float = 0
     
     private let maxHeight: CGFloat = 226
     private let playIconSize: CGFloat = 30
@@ -74,12 +76,21 @@ struct VideoDetailView: View {
     }
     
     private var downloadVideoButton: some View {
-        Button(action: {
-            print("Download video")
-        }) {
-            HStack {
-                Text("video-detail.download-button")
-                Image(systemName: "square.and.arrow.down")
+        Group {
+            if isDownloading {
+                ProgressBar(progress: $progress) {
+                    self.isDownloading = false
+                    self.progress = 0
+                }
+            } else {
+                Button(action: {
+                    self.isDownloading = true
+                }) {
+                    HStack {
+                        Text("video-detail.download-button")
+                        Image(systemName: "square.and.arrow.down")
+                    }
+                }
             }
         }
     }

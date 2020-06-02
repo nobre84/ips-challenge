@@ -28,6 +28,9 @@
 		00B403652483B92400379404 /* ActivityIndicator.swift in Sources */ = {isa = PBXBuildFile; fileRef = 00B403642483B92400379404 /* ActivityIndicator.swift */; };
 		00B4036A2483C49400379404 /* VideoListResponse.swift in Sources */ = {isa = PBXBuildFile; fileRef = 00B403692483C49400379404 /* VideoListResponse.swift */; };
 		00F38BC024851E9C00F8D8D0 /* PlayerView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 00F38BBF24851E9C00F8D8D0 /* PlayerView.swift */; };
+		00F38BE8248659CB00F8D8D0 /* Asset.swift in Sources */ = {isa = PBXBuildFile; fileRef = 00F38BE7248659CB00F8D8D0 /* Asset.swift */; };
+		00F38BEA248659D300F8D8D0 /* AssetPersistenceManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 00F38BE9248659D300F8D8D0 /* AssetPersistenceManager.swift */; };
+		00F38BEC24865DF100F8D8D0 /* ProgressBar.swift in Sources */ = {isa = PBXBuildFile; fileRef = 00F38BEB24865DF100F8D8D0 /* ProgressBar.swift */; };
 		3415EBD94A9478715A6C488C /* Pods_iPSChallengeTests.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 89B25362B66D0FB3751BE829 /* Pods_iPSChallengeTests.framework */; };
 		F61BAB27422247B6921FA53B /* Pods_iPSChallenge.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = A4910612C6B306CF986BDD4E /* Pods_iPSChallenge.framework */; };
 /* End PBXBuildFile section */
@@ -69,6 +72,9 @@
 		00B403642483B92400379404 /* ActivityIndicator.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ActivityIndicator.swift; sourceTree = "<group>"; };
 		00B403692483C49400379404 /* VideoListResponse.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = VideoListResponse.swift; sourceTree = "<group>"; };
 		00F38BBF24851E9C00F8D8D0 /* PlayerView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PlayerView.swift; sourceTree = "<group>"; };
+		00F38BE7248659CB00F8D8D0 /* Asset.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Asset.swift; sourceTree = "<group>"; };
+		00F38BE9248659D300F8D8D0 /* AssetPersistenceManager.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AssetPersistenceManager.swift; sourceTree = "<group>"; };
+		00F38BEB24865DF100F8D8D0 /* ProgressBar.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProgressBar.swift; sourceTree = "<group>"; };
 		55CE6118F75569328A489B63 /* Pods-iPSChallengeTests.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-iPSChallengeTests.release.xcconfig"; path = "Target Support Files/Pods-iPSChallengeTests/Pods-iPSChallengeTests.release.xcconfig"; sourceTree = "<group>"; };
 		8545F3431B4C2990C00A8081 /* Pods-iPSChallenge.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-iPSChallenge.release.xcconfig"; path = "Target Support Files/Pods-iPSChallenge/Pods-iPSChallenge.release.xcconfig"; sourceTree = "<group>"; };
 		89B25362B66D0FB3751BE829 /* Pods_iPSChallengeTests.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_iPSChallengeTests.framework; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -102,6 +108,7 @@
 			children = (
 				00B40346248304FA00379404 /* Extensions */,
 				002CDB8F24850E2D006A91DF /* MoyaCachePlugin.swift */,
+				00F38BE9248659D300F8D8D0 /* AssetPersistenceManager.swift */,
 			);
 			path = Support;
 			sourceTree = "<group>";
@@ -173,6 +180,7 @@
 			isa = PBXGroup;
 			children = (
 				00B4035C2483B64D00379404 /* Video.swift */,
+				00F38BE7248659CB00F8D8D0 /* Asset.swift */,
 			);
 			path = Model;
 			sourceTree = "<group>";
@@ -195,6 +203,7 @@
 				002CDB842483D6E0006A91DF /* VideoDetailView.swift */,
 				00B403642483B92400379404 /* ActivityIndicator.swift */,
 				00F38BBF24851E9C00F8D8D0 /* PlayerView.swift */,
+				00F38BEB24865DF100F8D8D0 /* ProgressBar.swift */,
 			);
 			path = View;
 			sourceTree = "<group>";
@@ -441,6 +450,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				00F38BE8248659CB00F8D8D0 /* Asset.swift in Sources */,
 				002CDB872483D6EA006A91DF /* VideoDetailViewModel.swift in Sources */,
 				00B4031F2483009E00379404 /* AppDelegate.swift in Sources */,
 				00B4035D2483B64D00379404 /* Video.swift in Sources */,
@@ -448,6 +458,7 @@
 				00B403652483B92400379404 /* ActivityIndicator.swift in Sources */,
 				00B403212483009E00379404 /* SceneDelegate.swift in Sources */,
 				00B4034A24830E8300379404 /* VideoListView.swift in Sources */,
+				00F38BEA248659D300F8D8D0 /* AssetPersistenceManager.swift in Sources */,
 				00B403592483B55900379404 /* MoyaPublisher.swift in Sources */,
 				002CDB852483D6E0006A91DF /* VideoDetailView.swift in Sources */,
 				00B4035F2483B68E00379404 /* VideoListViewModel.swift in Sources */,
@@ -457,6 +468,7 @@
 				002CDB812483D5F0006A91DF /* VideoListRowViewModel.swift in Sources */,
 				00B403572483B55900379404 /* AnyPublisher+Response.swift in Sources */,
 				00B403562483B55900379404 /* MoyaProvider+Combine.swift in Sources */,
+				00F38BEC24865DF100F8D8D0 /* ProgressBar.swift in Sources */,
 				00F38BC024851E9C00F8D8D0 /* PlayerView.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
