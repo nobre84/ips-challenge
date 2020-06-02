@@ -31,13 +31,6 @@ class VideoDetailViewModel: ObservableObject, Identifiable {
             return false
         }
         
-        var progress: Double {
-            if case .downloading(let progress) = self {
-                return progress
-            }
-            return 0
-        }
-        
         static func fromAssetState(_ assetState: Asset.DownloadState) -> Self {
             switch assetState {
                 case .notDownloaded:
@@ -55,8 +48,16 @@ class VideoDetailViewModel: ObservableObject, Identifiable {
     private let manager: AssetPersistenceManager
     private var disposables = Set<AnyCancellable>()
     
-    @Published var downloadState: DownloadState
+    @Published var downloadState: DownloadState {
+        didSet {
+            if case .downloading(let progress) = downloadState {
+                self.progress = progress
+            }
+        }
+    }
+    @Published var progress: Double = 0
     @Published var hasError = false
+    @Published var downloadAvailable = false
     var errorMessage: String?
     
     init(video: Video, manager: AssetPersistenceManager = .sharedManager) {
@@ -64,6 +65,7 @@ class VideoDetailViewModel: ObservableObject, Identifiable {
         self.asset = manager.assetFor(id: video.videoLink.absoluteString, url: video.videoLink)
         self.manager = manager
         self.downloadState = .fromAssetState(manager.downloadState(for: self.asset))
+        self.downloadAvailable = manager.isAvailable
         
         // Download State updates
         NotificationCenter.default.publisher(for: .assetDownloadStateChangedNotification)
@@ -107,6 +109,16 @@ class VideoDetailViewModel: ObservableObject, Identifiable {
                 self?.downloadState = .downloading(progress)
                 
                 print("Progress change: \(self?.downloadState)")
+        }
+        .store(in: &disposables)
+        
+        // Manager restoration completed
+        NotificationCenter.default.publisher(for: .assetPersistenceManagerDidRestoreStateNotification)
+            .receive(on: RunLoop.main)
+            .sink { [weak self] _ in
+                self?.downloadAvailable = true
+                
+                print("Download manager is available")
         }
         .store(in: &disposables)
     }

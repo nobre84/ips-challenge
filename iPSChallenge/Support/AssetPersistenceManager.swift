@@ -32,6 +32,9 @@ class AssetPersistenceManager: NSObject {
     /// Singleton for AssetPersistenceManager.
     static let sharedManager = AssetPersistenceManager()
     
+    /// Used to query if state restoring has been completed
+    var isAvailable = false
+    
     /// Internal Bool used to track if the AssetPersistenceManager finished restoring its state.
     private var didRestorePersistenceManager = false
     
@@ -73,7 +76,9 @@ class AssetPersistenceManager: NSObject {
                 self.activeDownloadsMap[assetDownloadTask] = asset
             }
             
+            self.isAvailable = true
             NotificationCenter.default.post(name: .assetPersistenceManagerDidRestoreStateNotification, object: nil)
+            print("Manager restoration complete")
         }
     }
     
@@ -149,14 +154,16 @@ class AssetPersistenceManager: NSObject {
             let url = try URL(resolvingBookmarkData: localFileLocation, bookmarkDataIsStale: &bookmarkDataIsStale)
             
             if bookmarkDataIsStale {
-                fatalError("Bookmark data is stale!")
+                throw "Bookmark data is stale!"
             }
             
             asset = Asset(id: id, urlAsset: AVURLAsset(url: url))
             
             return asset
         } catch  {
-            fatalError("Failed to create URL from bookmark with error: \(error)")
+            print("Failed to create URL from bookmark with error: \(error)")
+            userDefaults.removeObject(forKey: id)
+            return nil
         }
     }
     

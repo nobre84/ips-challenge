@@ -82,12 +82,14 @@ struct VideoDetailView: View {
         // There's a weird SwiftUI bug when changing the bar item contents:
         // https://stackoverflow.com/questions/61915629/swiftui-navigationbaritem-showing-in-strange-position-after-showing-a-different
         Group {
-            if self.viewModel.downloadState.isDownloading {
-                self.progressBar
-            } else if self.viewModel.downloadState.isDownloaded {
-                self.eraseVideoButton
-            } else {
-                self.downloadVideoButton
+            if viewModel.downloadAvailable {
+                if self.viewModel.downloadState.isDownloading {
+                    self.progressBar
+                } else if self.viewModel.downloadState.isDownloaded {
+                    self.eraseVideoButton
+                } else {
+                    self.downloadVideoButton
+                }
             }
         }
     }
@@ -96,9 +98,9 @@ struct VideoDetailView: View {
         Button(action: {
             self.viewModel.cancelDownload()
         }) {
-            HStack {
+            HStack(spacing: 4) {
                 Text("video-detail.cancel-download-button")
-                ProgressBar(progress: self.viewModel.downloadState.progress)
+                ProgressBar(progress: self.$viewModel.progress)
             }
         }
     }

@@ -11,7 +11,7 @@
 "retry-button" = "Retry";
 "no-videos-message" = "Nenhum vídeo";
 "video-detail.download-button" = "Baixar vídeo";
-"video-detail.cancel-download-button" = "Cancelar download";
+"video-detail.cancel-download-button" = "Cancelar";
 "video-detail.delete-button" = "Apagar vídeo";
 "video-detail.error-title" = "Erro ocorrido";
 "video-detail.error-default-message" = "Não foi possível baixar o vídeo.";
