@@ -154,7 +154,6 @@ class AssetPersistenceManager: NSObject {
             return nil 
         }
         
-        var asset: Asset?
         var bookmarkDataIsStale = false
         do {
             let url = try URL(resolvingBookmarkData: localFileLocation, bookmarkDataIsStale: &bookmarkDataIsStale)
@@ -163,9 +162,13 @@ class AssetPersistenceManager: NSObject {
                 throw "Bookmark data is stale!"
             }
             
-            asset = Asset(id: id, urlAsset: AVURLAsset(url: url))
+            let urlAsset = AVURLAsset(url: url)
             
-            return asset
+            guard let cache = urlAsset.assetCache, cache.isPlayableOffline else {
+                throw "Cached data is not playable!"
+            }
+            
+            return Asset(id: id, urlAsset: urlAsset)
         } catch  {
             Log.debug("Failed to create URL from bookmark with error: \(error)")
             userDefaults.removeObject(forKey: id)

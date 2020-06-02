@@ -136,7 +136,7 @@ class VideoDetailViewModel: ObservableObject, Identifiable {
     }
     
     var videoLink: URL {
-        return video.videoLink
+        return asset.urlAsset.url
     }
     
     func downloadVideo() {        
