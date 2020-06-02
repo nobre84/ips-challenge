@@ -42,10 +42,10 @@ class AssetPersistenceManager: NSObject {
     fileprivate var assetDownloadURLSession: AVAssetDownloadURLSession!
     
     /// Internal map of AVAssetDownloadTask to its corresponding Asset.
-    fileprivate var activeDownloadsMap = [AVAssetDownloadTask : Asset]()
+    fileprivate var activeDownloadsMap = [AVAggregateAssetDownloadTask : Asset]()
     
-    /// Internal map of AVAssetDownloadTask to its resoled AVMediaSelection
-    fileprivate var mediaSelectionMap = [AVAssetDownloadTask : AVMediaSelection]()
+    /// Internal map of AVAggregateAssetDownloadTask to download URL.
+    fileprivate var willDownloadToUrlMap = [AVAggregateAssetDownloadTask: URL]()
     
     // MARK: Intialization
     
@@ -70,7 +70,7 @@ class AssetPersistenceManager: NSObject {
         assetDownloadURLSession.getAllTasks { tasksArray in
             // For each task, restore the state in the app by recreating Asset structs and reusing existing AVURLAsset objects.
             for task in tasksArray {
-                guard let assetDownloadTask = task as? AVAssetDownloadTask, let assetName = task.taskDescription else { break }
+                guard let assetDownloadTask = task as? AVAggregateAssetDownloadTask, let assetName = task.taskDescription else { break }
                 
                 let asset = Asset(id: assetName, urlAsset: assetDownloadTask.urlAsset)
                 self.activeDownloadsMap[assetDownloadTask] = asset
@@ -84,14 +84,20 @@ class AssetPersistenceManager: NSObject {
     
     /// Triggers the initial AVAssetDownloadTask for a given Asset.
     func downloadStream(for asset: Asset) {
+        // Get the default media selections for the asset's media selection groups.
+        let preferredMediaSelection = asset.urlAsset.preferredMediaSelection
+        
         /*
          For the initial download, we ask the URLSession for an AVAssetDownloadTask
          with a minimum bitrate corresponding with one of the lower bitrate variants
          in the asset.
          */
-        guard let task = assetDownloadURLSession.makeAssetDownloadTask(asset: asset.urlAsset, assetTitle: asset.id, assetArtworkData: nil, options: [AVAssetDownloadTaskMinimumRequiredMediaBitrateKey: 265000]) else {
-            fatalError("Failed to create download task")
-        }
+        guard let task = assetDownloadURLSession.aggregateAssetDownloadTask(with: asset.urlAsset,
+                                                       mediaSelections: [preferredMediaSelection],
+                                                       assetTitle: asset.id,
+                                                       assetArtworkData: nil,
+                                                       options:
+        [AVAssetDownloadTaskMinimumRequiredMediaBitrateKey: 265_000]) else { return }
         
         // To better track the AVAssetDownloadTask we set the taskDescription to something unique for our sample.
         task.taskDescription = asset.id
@@ -208,7 +214,7 @@ class AssetPersistenceManager: NSObject {
     
     /// Cancels an AVAssetDownloadTask given an Asset.
     func cancelDownload(for asset: Asset) {
-        var task: AVAssetDownloadTask?
+        var task: AVAggregateAssetDownloadTask?
         
         for (taskKey, assetVal) in activeDownloadsMap {
             if asset == assetVal  {
@@ -301,11 +307,18 @@ extension AssetPersistenceManager: AVAssetDownloadDelegate {
          This is the ideal place to begin downloading additional media selections
          once the asset itself has finished downloading.
          */
-        guard let task = task as? AVAssetDownloadTask, let asset = activeDownloadsMap.removeValue(forKey: task) else { return }
+        guard let task = task as? AVAggregateAssetDownloadTask,
+            let asset = activeDownloadsMap.removeValue(forKey: task) else { return }
+        
+        guard let downloadURL = willDownloadToUrlMap.removeValue(forKey: task) else { return }
         
         // Prepare the basic userInfo dictionary that will be posted as part of our notification.
         var userInfo = [Asset.Keys: Any]()
-        userInfo[Asset.Keys.id] = asset.id        
+        userInfo[Asset.Keys.id] = asset.id
+        
+        defer {
+            postUpdate(userInfo)
+        }
         
         if let error = error as NSError? {
             switch (error.domain, error.code) {
@@ -332,89 +345,47 @@ extension AssetPersistenceManager: AVAssetDownloadDelegate {
             }
             
             userInfo[Asset.Keys.downloadState] = Asset.DownloadState.notDownloaded
-            
-            postUpdate(userInfo)
             return
         }
 
-        guard let pair = nextMediaSelection(task.urlAsset), let group = pair.group, let option = pair.option else {
-            // All additional media selections have been downloaded.
-            userInfo[Asset.Keys.downloadState] = Asset.DownloadState.downloaded
-            postUpdate(userInfo)
+        do {
+            let bookmark = try downloadURL.bookmarkData()
+
+            userDefaults.set(bookmark, forKey: asset.id)
+        } catch {
+            print("Failed to create bookmarkData for download URL.")
+            userInfo[Asset.Keys.error] = error
+            userInfo[Asset.Keys.downloadState] = Asset.DownloadState.notDownloaded
             return
         }
-                    
-        /*
-         This task did complete sucessfully. At this point the application
-         can download additional media selections if needed.
-         
-         To download additional `AVMediaSelection`s, you should use the
-         `AVMediaSelection` reference saved in `AVAssetDownloadDelegate.urlSession(_:assetDownloadTask:didResolve:)`.
-         */
-        
-        guard let originalMediaSelection = mediaSelectionMap[task] else { return }
-        
-        /*
-         There are still media selections to download.
-         
-         Create a mutable copy of the AVMediaSelection reference saved in
-         `AVAssetDownloadDelegate.urlSession(_:assetDownloadTask:didResolve:)`.
-         */
-        let mediaSelection = originalMediaSelection.mutableCopy() as! AVMutableMediaSelection
-        
-        // Select the AVMediaSelectionOption in the AVMediaSelectionGroup we found earlier.
-        mediaSelection.select(option, in: group)
-        
-        /*
-         Ask the `URLSession` to vend a new `AVAssetDownloadTask` using
-         the same `AVURLAsset` and assetTitle as before.
-         
-         This time, the application includes the specific `AVMediaSelection`
-         to download as well as a higher bitrate.
-         */
-        guard let nextTask = assetDownloadURLSession.makeAssetDownloadTask(asset: task.urlAsset, assetTitle: asset.id, assetArtworkData: nil, options: [AVAssetDownloadTaskMinimumRequiredMediaBitrateKey: 2000000, AVAssetDownloadTaskMediaSelectionKey: mediaSelection]) else { return }
-        
-        nextTask.taskDescription = asset.id
-        
-        activeDownloadsMap[nextTask] = asset
-        
-        nextTask.resume()
-        
-        userInfo[Asset.Keys.downloadState] = Asset.DownloadState.downloading
-        userInfo[Asset.Keys.downloadSelectionDisplayName] = option.displayName
-        
-        postUpdate(userInfo)
+
+        userInfo[Asset.Keys.downloadState] = Asset.DownloadState.downloaded
     }
     
-    func urlSession(_ session: URLSession, assetDownloadTask: AVAssetDownloadTask, didFinishDownloadingTo location: URL) {
-        let userDefaults = UserDefaults.standard
-        
+    /// Method called when the an aggregate download task determines the location this asset will be downloaded to.
+    func urlSession(_ session: URLSession, aggregateAssetDownloadTask: AVAggregateAssetDownloadTask,
+                    willDownloadTo location: URL) {
+
         /*
          This delegate callback should only be used to save the location URL
          somewhere in your application. Any additional work should be done in
          `URLSessionTaskDelegate.urlSession(_:task:didCompleteWithError:)`.
          */
-        if let asset = activeDownloadsMap[assetDownloadTask] {
-            
-            do {
-                let bookmark = try location.bookmarkData()
-                
-                userDefaults.set(bookmark, forKey: asset.id)
-            } catch {
-                print("Failed to create bookmark for location: \(location)")
-                deleteAsset(asset)
-            }
-        }
+
+        willDownloadToUrlMap[aggregateAssetDownloadTask] = location
     }
     
-    func urlSession(_ session: URLSession, assetDownloadTask: AVAssetDownloadTask, didLoad timeRange: CMTimeRange, totalTimeRangesLoaded loadedTimeRanges: [NSValue], timeRangeExpectedToLoad: CMTimeRange) {
+    func urlSession(_ session: URLSession, aggregateAssetDownloadTask: AVAggregateAssetDownloadTask,
+                    didLoad timeRange: CMTimeRange, totalTimeRangesLoaded loadedTimeRanges: [NSValue],
+                    timeRangeExpectedToLoad: CMTimeRange, for mediaSelection: AVMediaSelection) {
         // This delegate callback should be used to provide download progress for your AVAssetDownloadTask.
-        guard let asset = activeDownloadsMap[assetDownloadTask] else { return }
+        guard let asset = activeDownloadsMap[aggregateAssetDownloadTask] else { return }
         
         var percentComplete = 0.0
         for value in loadedTimeRanges {
-            let loadedTimeRange : CMTimeRange = value.timeRangeValue
-            percentComplete += CMTimeGetSeconds(loadedTimeRange.duration) / CMTimeGetSeconds(timeRangeExpectedToLoad.duration)
+            let loadedTimeRange: CMTimeRange = value.timeRangeValue
+            percentComplete +=
+                loadedTimeRange.duration.seconds / timeRangeExpectedToLoad.duration.seconds
         }
         
         var userInfo = [Asset.Keys: Any]()
@@ -423,14 +394,5 @@ extension AssetPersistenceManager: AVAssetDownloadDelegate {
         
         print("ProgressNotification \(percentComplete)")
         NotificationCenter.default.post(name: .assetDownloadProgressNotification, object: nil, userInfo:  userInfo)
-    }
-    
-    func urlSession(_ session: URLSession, assetDownloadTask: AVAssetDownloadTask, didResolve resolvedMediaSelection: AVMediaSelection) {
-        /*
-         You should be sure to use this delegate callback to keep a reference
-         to `resolvedMediaSelection` so that in the future you can use it to
-         download additional media selections.
-         */
-        mediaSelectionMap[assetDownloadTask] = resolvedMediaSelection
     }
 }
