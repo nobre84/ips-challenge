@@ -45,14 +45,16 @@ final class MockPersistenceManager: AssetPersistence {
         }
         
         let subject = PassthroughSubject<StreamState, Never>()
-        streamPlayback.forEach { subject.send($0) }
         
         cancellable = subject
             .delay(for: .milliseconds(10), scheduler: RunLoop.main)
             .sink(receiveValue: { [weak self] streamState in
+                print("Received value in subject: \(streamState)")
                 self?.postUpdate(streamState.userInfo,
                                  forName: streamState.name)
             })
+        
+        streamPlayback.forEach { subject.send($0) }
     }
     
     func cancelDownload(for asset: Asset) {
@@ -68,5 +70,21 @@ final class MockPersistenceManager: AssetPersistence {
                    forName: .assetDownloadStateChangedNotification)
     }
     
+    func makeAvailable() {
+        isAvailable = true
+        postUpdate([:], forName: .assetPersistenceManagerDidRestoreStateNotification)
+    }
+    
+    func postDownloadState() {
+        guard let downloadState = downloadState else {
+            fatalError("downloadState should be mocked prior to calling postDownloadState()")
+        }
+        guard let asset = asset else {
+            fatalError("asset should be mocked prior to calling postDownloadState()")
+        }
+        postUpdate([Asset.Keys.id: asset.id,
+                    Asset.Keys.downloadState: Asset.DownloadState(rawValue: downloadState.rawValue)!],
+        forName: .assetDownloadStateChangedNotification)
+    }
     
 }

@@ -12,7 +12,7 @@ import Combine
 
 class VideoDetailViewModel: ObservableObject, Identifiable {
     
-    enum DownloadState {
+    enum DownloadState: Equatable {
         case notDownloaded
         case downloading(Double)
         case downloaded
@@ -33,8 +33,8 @@ class VideoDetailViewModel: ObservableObject, Identifiable {
         
         static func fromAssetState(_ assetState: Asset.DownloadState) -> Self {
             switch assetState {
-                case .notDownloaded:
-                    return .notDownloaded
+            case .notDownloaded:
+                return .notDownloaded
             case .downloading:
                 return .downloading(0)
             case .downloaded:
