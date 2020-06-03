@@ -12,8 +12,7 @@ import Moya
 
 class VideoListViewModel: ObservableObject, Identifiable {
 
-    enum State {
-        
+    enum State: Equatable {
         case uninitialized
         case loading
         case error(Error)
@@ -31,6 +30,21 @@ class VideoListViewModel: ObservableObject, Identifiable {
                 return error
             }
             return nil
+        }
+        
+        static func == (lhs: VideoListViewModel.State, rhs: VideoListViewModel.State) -> Bool {
+            switch (lhs, rhs) {
+            case (.uninitialized, .uninitialized):
+                return true
+            case (.loading, .loading):
+                return true
+            case (.error(let lhsError), .error(let rhsError)):
+                return lhsError as NSError == rhsError as NSError
+            case (.ready(let lhsRows), .ready(let rhsRows)):
+                return lhsRows == rhsRows
+            default:
+                return false
+            }
         }
     }
     
@@ -60,7 +74,7 @@ class VideoListViewModel: ObservableObject, Identifiable {
                     Log.debug("Error fetching /videos endpoint: \(error)")
                 }
             }, receiveValue: { [weak self] videos in
-                self?.state = .ready(videos.map(VideoListRowViewModel.init))
+                self?.state = .ready(videos.map { VideoListRowViewModel(video: $0) })
             })
             .store(in: &disposables)
     }

@@ -1,6 +1,6 @@
 //
 //  LoadingView.swift
-//  SwiftIssues
+//  iPSChallenge
 //
 //  Created by Rafael Nobre on 16/05/20.
 //  Copyright © 2020 Rafael Nobre. All rights reserved.

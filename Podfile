@@ -8,6 +8,7 @@ target 'iPSChallenge' do
 
   target 'iPSChallengeTests' do
     inherit! :search_paths
+    pod 'Quick'
     pod 'Nimble'
     pod 'OHHTTPStubs/Swift'
   end

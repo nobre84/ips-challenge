@@ -24,13 +24,28 @@ extension Notification.Name {
     static let assetPersistenceManagerDidRestoreStateNotification: NSNotification.Name = NSNotification.Name(rawValue: "AssetPersistenceManagerDidRestoreStateNotification")
 }
 
+protocol AssetPersistence {
+    var isAvailable: Bool { get }
+    func assetFor(id: String, url: URL) -> Asset
+    func downloadState(for asset: Asset) -> Asset.DownloadState
+    func downloadStream(for asset: Asset)
+    func cancelDownload(for asset: Asset)
+    func deleteAsset(_ asset: Asset)
+}
 
+extension AssetPersistence {
+    func postUpdate(_ userInfo: [Asset.Keys: Any],
+                    forName name: Notification.Name = .assetDownloadStateChangedNotification) {
+        NotificationCenter.default.post(name: name, object: nil, userInfo: userInfo)
+    }
+}
 
-class AssetPersistenceManager: NSObject {
+class AssetPersistenceManager: NSObject, AssetPersistence {
+    
     // MARK: Properties
     
     /// Singleton for AssetPersistenceManager.
-    static let sharedManager = AssetPersistenceManager()
+    static let shared = AssetPersistenceManager()
     
     /// Used to query if state restoring has been completed
     var isAvailable = false
@@ -77,7 +92,7 @@ class AssetPersistenceManager: NSObject {
             }
             
             self.isAvailable = true
-            NotificationCenter.default.post(name: .assetPersistenceManagerDidRestoreStateNotification, object: nil)
+            self.postUpdate([:], forName: .assetPersistenceManagerDidRestoreStateNotification)
             Log.debug("Manager restoration complete")
         }
     }
@@ -299,11 +314,6 @@ class AssetPersistenceManager: NSObject {
  */
 extension AssetPersistenceManager: AVAssetDownloadDelegate {
     
-    func postUpdate(_ userInfo: [Asset.Keys: Any],
-                    forName name: Notification.Name = .assetDownloadStateChangedNotification) {
-        NotificationCenter.default.post(name: name, object: nil, userInfo: userInfo)
-    }
-    
     func urlSession(_ session: URLSession, task: URLSessionTask, didCompleteWithError error: Error?) {
         let userDefaults = UserDefaults.standard
         
@@ -398,6 +408,6 @@ extension AssetPersistenceManager: AVAssetDownloadDelegate {
         userInfo[Asset.Keys.percentDownloaded] = percentComplete
         
         Log.debug("ProgressNotification \(userInfo)")
-        postUpdate(userInfo, forName: .assetDownloadProgressNotification)        
+        postUpdate(userInfo, forName: .assetDownloadProgressNotification)
     }
 }

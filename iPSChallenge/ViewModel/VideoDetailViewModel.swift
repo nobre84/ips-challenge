@@ -45,7 +45,7 @@ class VideoDetailViewModel: ObservableObject, Identifiable {
     
     private let video: Video
     private var asset: Asset
-    private let manager: AssetPersistenceManager
+    private let manager: AssetPersistence
     private var disposables = Set<AnyCancellable>()
     
     @Published var downloadState: DownloadState {
@@ -60,7 +60,7 @@ class VideoDetailViewModel: ObservableObject, Identifiable {
     @Published var downloadAvailable = false
     var errorMessage: String?
     
-    init(video: Video, manager: AssetPersistenceManager = .sharedManager) {
+    init(video: Video, manager: AssetPersistence = AssetPersistenceManager.shared) {
         self.video = video
         self.asset = manager.assetFor(id: "\(video.id)", url: video.videoLink)
         self.manager = manager
