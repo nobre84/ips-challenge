@@ -88,6 +88,24 @@ class VideoListViewSpec: QuickSpec {
                     }.notTo(throwError())
                 }
                 
+                it("should report errors") {
+                    stub(condition: isHost(iPSService.host)) { _ in
+                        return HTTPStubsResponse(data: Data(),
+                                                 statusCode: 200,
+                                                 headers: nil)
+                    }
+                    viewModel.fetchVideos()
+                    expect(viewModel.state.isLoading).toEventually(beFalse())
+                    
+                    expect {
+                        try view.body.inspect().anyView().vStack().text(1).string()
+                    }.notTo(throwError())
+                    
+                    expect {
+                        try view.body.inspect().anyView().vStack().button(2)
+                    }.notTo(throwError())
+                }
+                
             }
             
         }
