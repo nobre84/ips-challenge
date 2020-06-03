@@ -110,8 +110,8 @@ class VideoDetailViewModelSpec: QuickSpec {
                 it("has a fully completed download") {
                     manager.streamPlayback = successPlayback
                     viewModel.downloadVideo()
-                    expect(viewModel.progress) == 0
-                    expect(viewModel.progress).toEventually(equal(1))
+                    manager.downloadState = .notDownloaded
+                    expect(viewModel.downloadState).toEventually(equal(.downloaded))
                 }
                 
                 it("has a download in progress") {
@@ -128,6 +128,7 @@ class VideoDetailViewModelSpec: QuickSpec {
                     expect(viewModel.downloadState) == .notDownloaded
                     expect(viewModel.hasError) == false
                     expect(viewModel.hasError).toEventually(beTrue())
+                    expect(viewModel.downloadState).toEventually(equal(.notDownloaded))
                 }
                 
                 it("can delete a downloaded video") {
@@ -144,6 +145,32 @@ class VideoDetailViewModelSpec: QuickSpec {
                     expect(viewModel.progress).toEventually(equal(0.75))
                     viewModel.cancelDownload()
                     expect(viewModel.downloadState).toEventually(equal(.notDownloaded))
+                }
+                
+                it("only updates state for a matching asset id") {
+                    manager.streamPlayback = [
+                        (name: .assetDownloadStateChangedNotification,
+                         userInfo: [Asset.Keys.id: "49",
+                                    Asset.Keys.downloadState: Asset.DownloadState.downloading])
+                    ]
+                    viewModel.downloadVideo()
+                    manager.downloadState = .notDownloaded
+                    expect(viewModel.downloadState).toEventually(equal(.notDownloaded))
+                }
+                
+                context("when receiving malformed notifications") {
+                    
+                }
+                it("doesn't update state with a malformed notification") {
+                    manager.streamPlayback = [
+                        (name: .assetDownloadStateChangedNotification,
+                         userInfo: [Asset.Keys.id: asset.id,
+                                    Asset.Keys.downloadState: Asset.DownloadState.downloading]),
+                        (name: .assetDownloadStateChangedNotification,
+                         userInfo: [Asset.Keys.id: asset.id,
+                                    Asset.Keys.error: "Error downloading data",
+                                    Asset.Keys.downloadState: Asset.DownloadState.notDownloaded])
+                    ]
                 }
             }
         }

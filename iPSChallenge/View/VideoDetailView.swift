@@ -54,28 +54,30 @@ struct VideoDetailView: View {
     }
     
     private var videoPreviewButton: some View {
-        Button(action: {
-            self.isPlaying = true
-        }) {
-            ZStack {
-                WebImage(url: self.viewModel.thumbnail)
-                    .resizable()
-                    .indicator(.activity)
-                    .transition(.fade(duration: 0.5))
-                    .frame(height: maxHeight)
-                    .cornerRadius(4)
-                Image(systemName: "play.circle")
-                    .resizable()
-                    .aspectRatio(contentMode: .fit)
-                    .frame(width: playIconSize, height: playIconSize)
-                    .foregroundColor(.white)
+        Group {
+            if !isPlaying {
+                Button(action: {
+                    self.isPlaying = true
+                }) {
+                    ZStack {
+                        WebImage(url: self.viewModel.thumbnail)
+                            .resizable()
+                            .indicator(.activity)
+                            .transition(.fade(duration: 0.5))                            
+                        Image(systemName: "play.circle")
+                            .resizable()
+                            .aspectRatio(contentMode: .fit)
+                            .frame(width: playIconSize, height: playIconSize)
+                            .foregroundColor(.white)
+                    }
+                }
+                .buttonStyle(PlainButtonStyle())
+            } else {
+                PlayerView(videoURL: self.viewModel.videoLink)
             }
         }
-        .buttonStyle(PlainButtonStyle())
-        .sheet(isPresented: $isPlaying) {
-            PlayerView(videoURL: self.viewModel.videoLink)
-                .edgesIgnoringSafeArea(.all)
-        }
+        .frame(height: maxHeight)
+        .cornerRadius(4)
     }
     
     private var trailingBarItem: some View {
