@@ -299,8 +299,9 @@ class AssetPersistenceManager: NSObject {
  */
 extension AssetPersistenceManager: AVAssetDownloadDelegate {
     
-    func postUpdate(_ userInfo: [Asset.Keys: Any]) {
-        NotificationCenter.default.post(name: .assetDownloadStateChangedNotification, object: nil, userInfo: userInfo)
+    func postUpdate(_ userInfo: [Asset.Keys: Any],
+                    forName name: Notification.Name = .assetDownloadStateChangedNotification) {
+        NotificationCenter.default.post(name: name, object: nil, userInfo: userInfo)
     }
     
     func urlSession(_ session: URLSession, task: URLSessionTask, didCompleteWithError error: Error?) {
@@ -383,7 +384,8 @@ extension AssetPersistenceManager: AVAssetDownloadDelegate {
                     timeRangeExpectedToLoad: CMTimeRange, for mediaSelection: AVMediaSelection) {
         // This delegate callback should be used to provide download progress for your AVAssetDownloadTask.
         guard let asset = activeDownloadsMap[aggregateAssetDownloadTask] else { return }
-        
+        guard timeRangeExpectedToLoad.duration.seconds > 0 else { return }
+                
         var percentComplete = 0.0
         for value in loadedTimeRanges {
             let loadedTimeRange: CMTimeRange = value.timeRangeValue
@@ -395,7 +397,7 @@ extension AssetPersistenceManager: AVAssetDownloadDelegate {
         userInfo[Asset.Keys.id] = asset.id
         userInfo[Asset.Keys.percentDownloaded] = percentComplete
         
-        Log.debug("ProgressNotification \(percentComplete)")
-        NotificationCenter.default.post(name: .assetDownloadProgressNotification, object: nil, userInfo:  userInfo)
+        Log.debug("ProgressNotification \(userInfo)")
+        postUpdate(userInfo, forName: .assetDownloadProgressNotification)        
     }
 }
