@@ -48,19 +48,17 @@ class VideoDetailViewModelSpec: QuickSpec {
                                 Asset.Keys.percentDownloaded: 1.0]),
                     (name: .assetDownloadStateChangedNotification,
                      userInfo: [Asset.Keys.id: asset.id,
-                                Asset.Keys.downloadState: Asset.DownloadState.downloaded]),
+                                Asset.Keys.downloadState: Asset.DownloadState.downloaded])
                 ]
                 
                 failurePlayback = [
                     (name: .assetDownloadStateChangedNotification,
                      userInfo: [Asset.Keys.id: asset.id,
                                 Asset.Keys.downloadState: Asset.DownloadState.downloading]),
-                    (name: .assetDownloadProgressNotification,
-                     userInfo: [Asset.Keys.id: asset.id,
-                                Asset.Keys.error: "Error downloading data"]),
                     (name: .assetDownloadStateChangedNotification,
                      userInfo: [Asset.Keys.id: asset.id,
-                                Asset.Keys.downloadState: Asset.DownloadState.notDownloaded]),
+                                Asset.Keys.error: "Error downloading data",
+                                Asset.Keys.downloadState: Asset.DownloadState.notDownloaded])
                 ]
             }
             
@@ -111,17 +109,41 @@ class VideoDetailViewModelSpec: QuickSpec {
                 
                 it("has a fully completed download") {
                     manager.streamPlayback = successPlayback
-                    manager.downloadStream(for: asset)
+                    viewModel.downloadVideo()
                     expect(viewModel.progress) == 0
                     expect(viewModel.progress).toEventually(equal(1))
                 }
                 
                 it("has a download in progress") {
                     manager.streamPlayback = successPlayback.dropLast(2)
-                    manager.downloadStream(for: asset)
+                    viewModel.downloadVideo()
                     expect(viewModel.downloadState) == .notDownloaded
                     expect(viewModel.downloadState.isDownloading).toEventually(beTrue())
                     expect(viewModel.progress) == 0.75
+                }
+                
+                it("has a failed download") {
+                    manager.streamPlayback = failurePlayback
+                    viewModel.downloadVideo()
+                    expect(viewModel.downloadState) == .notDownloaded
+                    expect(viewModel.hasError) == false
+                    expect(viewModel.hasError).toEventually(beTrue())
+                }
+                
+                it("can delete a downloaded video") {
+                    manager.streamPlayback = successPlayback
+                    viewModel.downloadVideo()
+                    expect(viewModel.downloadState).toEventually(equal(.downloaded))
+                    viewModel.removeVideo()
+                    expect(viewModel.downloadState).toEventually(equal(.notDownloaded))
+                }
+                
+                it("can cancel a download inflight") {
+                    manager.streamPlayback = successPlayback.dropLast(2)
+                    viewModel.downloadVideo()
+                    expect(viewModel.progress).toEventually(equal(0.75))
+                    viewModel.cancelDownload()
+                    expect(viewModel.downloadState).toEventually(equal(.notDownloaded))
                 }
             }
         }
