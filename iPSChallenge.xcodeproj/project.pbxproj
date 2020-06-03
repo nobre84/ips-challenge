@@ -20,14 +20,15 @@
 		005D13442487B57400AE5BFC /* Bundle+Force.swift in Sources */ = {isa = PBXBuildFile; fileRef = 005D133F2487B57400AE5BFC /* Bundle+Force.swift */; };
 		005D13452487B57400AE5BFC /* SwizzlingHelper.swift in Sources */ = {isa = PBXBuildFile; fileRef = 005D13402487B57400AE5BFC /* SwizzlingHelper.swift */; };
 		005D13472487B57400AE5BFC /* Locale+Force.swift in Sources */ = {isa = PBXBuildFile; fileRef = 005D13422487B57400AE5BFC /* Locale+Force.swift */; };
-		005D134A2487B61700AE5BFC /* ViewInspector in Frameworks */ = {isa = PBXBuildFile; productRef = 005D13492487B61700AE5BFC /* ViewInspector */; };
+		005D134A2487B61700AE5BFC /* BuildFile in Frameworks */ = {isa = PBXBuildFile; productRef = 005D13492487B61700AE5BFC /* SwiftPackageProductDependency */; };
 		005D13542487B62E00AE5BFC /* VideoListViewModelSpec.swift in Sources */ = {isa = PBXBuildFile; fileRef = 005D134C2487B62D00AE5BFC /* VideoListViewModelSpec.swift */; };
 		005D13552487B62E00AE5BFC /* VideoDetailViewModelSpec.swift in Sources */ = {isa = PBXBuildFile; fileRef = 005D134D2487B62D00AE5BFC /* VideoDetailViewModelSpec.swift */; };
 		005D13562487B62E00AE5BFC /* VideoListRowViewModelSpec.swift in Sources */ = {isa = PBXBuildFile; fileRef = 005D134E2487B62D00AE5BFC /* VideoListRowViewModelSpec.swift */; };
-		005D13572487B62E00AE5BFC /* VideoDetailViewSpec.swift in Sources */ = {isa = PBXBuildFile; fileRef = 005D13512487B62D00AE5BFC /* VideoDetailViewSpec.swift */; };
 		005D13582487B62E00AE5BFC /* iPSServiceSpec.swift in Sources */ = {isa = PBXBuildFile; fileRef = 005D13532487B62D00AE5BFC /* iPSServiceSpec.swift */; };
 		005D135B2487BA1700AE5BFC /* Video+Dummy.swift in Sources */ = {isa = PBXBuildFile; fileRef = 005D135A2487BA1700AE5BFC /* Video+Dummy.swift */; };
 		005D135F2487BEA900AE5BFC /* MockPersistenceManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 005D135E2487BEA900AE5BFC /* MockPersistenceManager.swift */; };
+		00AC0C2D248833AC001B57A0 /* VideoListViewSpec.swift in Sources */ = {isa = PBXBuildFile; fileRef = 00AC0C2C248833AC001B57A0 /* VideoListViewSpec.swift */; };
+		00AC0C3424883C9D001B57A0 /* fastlane in Resources */ = {isa = PBXBuildFile; fileRef = 00AC0C3324883C9D001B57A0 /* fastlane */; };
 		00B4031F2483009E00379404 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 00B4031E2483009E00379404 /* AppDelegate.swift */; };
 		00B403212483009E00379404 /* SceneDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 00B403202483009E00379404 /* SceneDelegate.swift */; };
 		00B40325248300A000379404 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 00B40324248300A000379404 /* Assets.xcassets */; };
@@ -77,10 +78,11 @@
 		005D134C2487B62D00AE5BFC /* VideoListViewModelSpec.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = VideoListViewModelSpec.swift; sourceTree = "<group>"; };
 		005D134D2487B62D00AE5BFC /* VideoDetailViewModelSpec.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = VideoDetailViewModelSpec.swift; sourceTree = "<group>"; };
 		005D134E2487B62D00AE5BFC /* VideoListRowViewModelSpec.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = VideoListRowViewModelSpec.swift; sourceTree = "<group>"; };
-		005D13512487B62D00AE5BFC /* VideoDetailViewSpec.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = VideoDetailViewSpec.swift; sourceTree = "<group>"; };
 		005D13532487B62D00AE5BFC /* iPSServiceSpec.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = iPSServiceSpec.swift; sourceTree = "<group>"; };
 		005D135A2487BA1700AE5BFC /* Video+Dummy.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Video+Dummy.swift"; sourceTree = "<group>"; };
 		005D135E2487BEA900AE5BFC /* MockPersistenceManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MockPersistenceManager.swift; sourceTree = "<group>"; };
+		00AC0C2C248833AC001B57A0 /* VideoListViewSpec.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = VideoListViewSpec.swift; sourceTree = "<group>"; };
+		00AC0C3324883C9D001B57A0 /* fastlane */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = fastlane; sourceTree = SOURCE_ROOT; };
 		00B4031B2483009E00379404 /* iPSChallenge.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = iPSChallenge.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		00B4031E2483009E00379404 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		00B403202483009E00379404 /* SceneDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SceneDelegate.swift; sourceTree = "<group>"; };
@@ -124,7 +126,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				3415EBD94A9478715A6C488C /* Pods_iPSChallengeTests.framework in Frameworks */,
-				005D134A2487B61700AE5BFC /* ViewInspector in Frameworks */,
+				005D134A2487B61700AE5BFC /* BuildFile in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -175,7 +177,7 @@
 		005D13502487B62D00AE5BFC /* View */ = {
 			isa = PBXGroup;
 			children = (
-				005D13512487B62D00AE5BFC /* VideoDetailViewSpec.swift */,
+				00AC0C2C248833AC001B57A0 /* VideoListViewSpec.swift */,
 			);
 			path = View;
 			sourceTree = "<group>";
@@ -257,6 +259,7 @@
 		00B40342248300B400379404 /* Supporting files */ = {
 			isa = PBXGroup;
 			children = (
+				00AC0C3324883C9D001B57A0 /* fastlane */,
 				00B4031E2483009E00379404 /* AppDelegate.swift */,
 				00B403202483009E00379404 /* SceneDelegate.swift */,
 				00B4032C248300A000379404 /* Info.plist */,
@@ -391,7 +394,7 @@
 			);
 			name = iPSChallengeTests;
 			packageProductDependencies = (
-				005D13492487B61700AE5BFC /* ViewInspector */,
+				005D13492487B61700AE5BFC /* SwiftPackageProductDependency */,
 			);
 			productName = iPSChallengeTests;
 			productReference = 00B40331248300A000379404 /* iPSChallengeTests.xctest */;
@@ -409,9 +412,11 @@
 				TargetAttributes = {
 					00B4031A2483009E00379404 = {
 						CreatedOnToolsVersion = 11.4.1;
+						ProvisioningStyle = Automatic;
 					};
 					00B40330248300A000379404 = {
 						CreatedOnToolsVersion = 11.4.1;
+						ProvisioningStyle = Automatic;
 						TestTargetID = 00B4031A2483009E00379404;
 					};
 				};
@@ -427,7 +432,7 @@
 			);
 			mainGroup = 00B403122483009E00379404;
 			packageReferences = (
-				005D13482487B61700AE5BFC /* XCRemoteSwiftPackageReference "ViewInspector" */,
+				005D13482487B61700AE5BFC /* RemoteSwiftPackageReference */,
 			);
 			productRefGroup = 00B4031C2483009E00379404 /* Products */;
 			projectDirPath = "";
@@ -446,6 +451,7 @@
 			files = (
 				00B4032B248300A000379404 /* LaunchScreen.storyboard in Resources */,
 				002CDB8A2485024E006A91DF /* Localizable.strings in Resources */,
+				00AC0C3424883C9D001B57A0 /* fastlane in Resources */,
 				00B40325248300A000379404 /* Assets.xcassets in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -576,12 +582,12 @@
 			buildActionMask = 2147483647;
 			files = (
 				005D13442487B57400AE5BFC /* Bundle+Force.swift in Sources */,
-				005D13572487B62E00AE5BFC /* VideoDetailViewSpec.swift in Sources */,
 				005D13582487B62E00AE5BFC /* iPSServiceSpec.swift in Sources */,
 				005D13452487B57400AE5BFC /* SwizzlingHelper.swift in Sources */,
 				005D13432487B57400AE5BFC /* TimeZone+Force.swift in Sources */,
 				005D135F2487BEA900AE5BFC /* MockPersistenceManager.swift in Sources */,
 				005D13552487B62E00AE5BFC /* VideoDetailViewModelSpec.swift in Sources */,
+				00AC0C2D248833AC001B57A0 /* VideoListViewSpec.swift in Sources */,
 				005D13542487B62E00AE5BFC /* VideoListViewModelSpec.swift in Sources */,
 				005D13562487B62E00AE5BFC /* VideoListRowViewModelSpec.swift in Sources */,
 				005D135B2487BA1700AE5BFC /* Video+Dummy.swift in Sources */,
@@ -853,7 +859,7 @@
 /* End XCConfigurationList section */
 
 /* Begin XCRemoteSwiftPackageReference section */
-		005D13482487B61700AE5BFC /* XCRemoteSwiftPackageReference "ViewInspector" */ = {
+		005D13482487B61700AE5BFC /* RemoteSwiftPackageReference */ = {
 			isa = XCRemoteSwiftPackageReference;
 			repositoryURL = "https://github.com/nalexn/ViewInspector";
 			requirement = {
@@ -864,9 +870,9 @@
 /* End XCRemoteSwiftPackageReference section */
 
 /* Begin XCSwiftPackageProductDependency section */
-		005D13492487B61700AE5BFC /* ViewInspector */ = {
+		005D13492487B61700AE5BFC /* SwiftPackageProductDependency */ = {
 			isa = XCSwiftPackageProductDependency;
-			package = 005D13482487B61700AE5BFC /* XCRemoteSwiftPackageReference "ViewInspector" */;
+			package = 005D13482487B61700AE5BFC /* RemoteSwiftPackageReference */;
 			productName = ViewInspector;
 		};
 /* End XCSwiftPackageProductDependency section */

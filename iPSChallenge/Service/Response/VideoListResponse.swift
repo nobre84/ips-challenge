@@ -8,6 +8,6 @@
 
 import Foundation
 
-struct VideoListResponse: Decodable {
+struct VideoListResponse: Codable {
     let videos: [Video]
 }
